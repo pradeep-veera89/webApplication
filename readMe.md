@@ -11,6 +11,16 @@
 ## Templates
 - Always use helper (renderTemplate) to parse the template
 - Go uses 'template.ParseFiles' to parse the html template and 'Execute' for executing the template.
+- Generate template cache to automatically
+  
+### Base layout
+- Add a base layout by defining base '{{define "base"}}'
+- Add content block followed by "."
+  
+### Child layout
+- extends the base layout using '{{template "base"}}'
+- define the custom body by using '{{define "content"}}'
+  
 ### StadardFunctions
 - Package : "html/template"
 -  ParseFiles
