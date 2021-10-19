@@ -42,7 +42,8 @@ func RenderTemplate(w http.ResponseWriter, html string, td *models.TemplateData)
 
 	buf := new(bytes.Buffer)
 
-	td = AddDefaultData(td)
+	//td = AddDefaultData(td)
+	log.Println(td)
 	_ = t.Execute(buf, td)
 	_, err := buf.WriteTo(w)
 	if err != nil {
