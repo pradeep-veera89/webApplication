@@ -10,6 +10,10 @@
   - Here we have used Recoverer middleware from chi to provide stacktrace and error log in case of panic situation
   - Used NoSurf Package 'github.com/justinas/nosurf' for CSRF Token Protection
   - CSRFToken is generated using middleware of the CHI Router.
+  - SessionLoad to load and save sessions from SCS Session Package
+- middleware.go
+  - new middleware to add CSRF Protection
+  - new middleware to load and save Sessions from SCS Session package. 
   
 ## PKG (pkg)
 - Packages are the directory / folder in which the go file is present.
@@ -65,3 +69,4 @@
 ## External Golang Packages
 - NoSurf Package 'github.com/justinas/nosurf' for CSRF Token Protection
 - CHI Router Package 'go get -u github.com/go-chi/chi/v5' for Routing instead of http router.
+- SCS (Session) Package 'https://github.com/alexedwards/scs' for session management.

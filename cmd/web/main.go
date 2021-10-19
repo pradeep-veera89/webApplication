@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/pradeep-veera89/webApplication/pkg/config"
 	"github.com/pradeep-veera89/webApplication/pkg/handlers"
 	"github.com/pradeep-veera89/webApplication/pkg/render"
@@ -12,10 +14,21 @@ import (
 
 const portNumber = ":8080"
 
+var app config.AppConfig
+var session *scs.SessionManager
+
 // main is the main application function
 func main() {
 
-	var app config.AppConfig
+	// Change this to true when in production
+	app.InProduction = false
+	session = scs.New()
+	session.Lifetime = 24 * time.Hour
+	session.Cookie.Persist = true
+	session.Cookie.SameSite = http.SameSiteLaxMode
+	session.Cookie.Secure = app.InProduction
+
+	app.Session = session
 
 	// initializes the template cache
 	tc, err := render.CreateTemplateCache()
