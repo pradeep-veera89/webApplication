@@ -9,6 +9,8 @@
 - This package is imported by other parts of the application but the config package doesnot import any other packages from the application.
 - Add Template Cache to the appConfig.
 
+### Models
+- Added templateData struct to store all the infromation which are passed to template
    
 ## Handlers
 -  Package : "net/http"
@@ -38,3 +40,7 @@
 - Function name starting with Capital letter are visible to other packages inside the project.
 - Function name starting with small letter are not visible to other packages inside the project
 - Comments for the function should start with function name
+
+### Import Cycle Problem
+- There are package with name A and B
+- This problem occurs when A imports B and B also imports A.
