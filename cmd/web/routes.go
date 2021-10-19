@@ -20,5 +20,9 @@ func routes(app *config.AppConfig) http.Handler {
 	// different routes.
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/about", handlers.Repo.About)
+
+	// to load all the static files like images, css, js.
+	fileServer := http.FileServer(http.Dir("./static/"))
+	mux.Handle("/static/*", http.StripPrefix("/static/", fileServer))
 	return mux
 }
