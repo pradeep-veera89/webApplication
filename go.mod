@@ -1,3 +1,3 @@
-module github.com/pradeep-veera89/web-application
+module github.com/pradeep-veera89/webApplication
 
 go 1.16

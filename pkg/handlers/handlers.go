@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/pradeep-veera89/web-application/render"
+	"github.com/pradeep-veera89/webApplication/pkg/render"
 )
 
 // Home is the home page handler
