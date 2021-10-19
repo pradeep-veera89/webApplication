@@ -3,10 +3,10 @@ package render
 import (
 	"bytes"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
-	"text/template"
 )
 
 var functions = template.FuncMap{}
@@ -14,6 +14,7 @@ var functions = template.FuncMap{}
 // RenderTemplate renders with HTML Template file.
 func RenderTemplate(w http.ResponseWriter, html string) {
 
+	 
 	tc, err := CreateTemplateCache()
 	if err != nil {
 		log.Fatal(err)

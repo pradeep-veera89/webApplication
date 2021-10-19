@@ -2,11 +2,19 @@
 
 ## Packages
 - Packages are the directory / folder in which the go file is present.
-- 
+  
+### Config (pkg/config/config.go)
+- Application wide config.
+- This cofiguration is accesed by any kind of application
+- This package is imported by other parts of the application but the config package doesnot import any other packages from the application.
+- Add Template Cache to the appConfig.
+
+   
 ## Handlers
 -  Package : "net/http"
 -  HandleFunc
 -  ListenAndServe
+
 
 ## Templates
 - Always use helper (renderTemplate) to parse the template
