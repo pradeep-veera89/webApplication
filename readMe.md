@@ -8,6 +8,8 @@
   - uses chi router for building the routes.
   - chi router has middleware which is not present in standard http router
   - Here we have used Recoverer middleware from chi to provide stacktrace and error log in case of panic situation
+  - Used NoSurf Package 'github.com/justinas/nosurf' for CSRF Token Protection
+  - CSRFToken is generated using middleware of the CHI Router.
   
 ## PKG (pkg)
 - Packages are the directory / folder in which the go file is present.
@@ -59,3 +61,7 @@
 #### Import Cycle Problem
 - There are package with name A and B
 - This problem occurs when A imports B and B also imports A.
+
+## External Golang Packages
+- NoSurf Package 'github.com/justinas/nosurf' for CSRF Token Protection
+- CHI Router Package 'go get -u github.com/go-chi/chi/v5' for Routing instead of http router.
