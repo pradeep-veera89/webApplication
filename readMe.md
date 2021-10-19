@@ -11,7 +11,7 @@
 ## Templates
 - Always use helper (renderTemplate) to parse the template
 - Go uses 'template.ParseFiles' to parse the html template and 'Execute' for executing the template.
-- Generate template cache to automatically
+- Generate template cache to automatically fetch the templates.
   
 ### Base layout
 - Add a base layout by defining base '{{define "base"}}'
