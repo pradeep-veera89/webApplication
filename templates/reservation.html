@@ -181,7 +181,7 @@
         document.getElementById("color-button").addEventListener("click", function () {
             //notify("This is my message", "warning")
             //notifyModal("title", "helloworld", "success","My test")
-            attention.success();
+            attention.error({ msg: "Invalid UserName or Password", icon: "error" });
         });
 
         // Notie Notification for success, warning and error messages.
@@ -200,19 +200,67 @@
                 confirmButtonText: confirmButtonText
             })
         }
+
         // Using Javascript Modules (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
         function prompt() {
-            let toast = function() {
-                console.log('clicked button and got toast')
+            let toast = function (c) {
+                const {
+                    msg = "",
+                    icon = "success",
+                    position = "top-end",
+                } = c
+                const Toast = Swal.mixin({
+                    toast: true,
+                    title: msg,
+                    position: position,
+                    icon: icon,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+
+                Toast.fire({})
             }
 
-            let success = function() {
-                console.log('clicked button and got success')
+            let success = function (c) {
+                const {
+                    msg = "",
+                    position = "top-end",
+                    title="",
+                    footer=""
+                } = c
+                Swal.fire({
+                    icon: 'success',
+                    title: title,
+                    text: msg,
+                    footer: footer
+                })
             }
+
+            let error = function (c) {
+                const {
+                    msg = "",
+                    position = "top-end",
+                    title="",
+                    footer=""
+                } = c
+                Swal.fire({
+                    icon: 'error',
+                    title: title,
+                    text: msg,
+                    footer: footer
+                })
+            }
+
 
             return {
-                toast:toast,
-                success:success
+                toast: toast,
+                success: success,
+                error:error
             }
         }
     </script>
