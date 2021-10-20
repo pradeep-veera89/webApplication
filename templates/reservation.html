@@ -148,6 +148,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
 
+        let attention = prompt();
+
+        // datepicker using vanilla datepicker
         const elem = document.getElementById('reservation-dates');
         const rangepicker = new DateRangePicker(elem, {
             // ...options
@@ -177,7 +180,8 @@
 
         document.getElementById("color-button").addEventListener("click", function () {
             //notify("This is my message", "warning")
-            notifyModal("title", "helloworld", "success","My test")
+            //notifyModal("title", "helloworld", "success","My test")
+            attention.success();
         });
 
         // Notie Notification for success, warning and error messages.
@@ -196,7 +200,21 @@
                 confirmButtonText: confirmButtonText
             })
         }
+        // Using Javascript Modules (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+        function prompt() {
+            let toast = function() {
+                console.log('clicked button and got toast')
+            }
 
+            let success = function() {
+                console.log('clicked button and got success')
+            }
+
+            return {
+                toast:toast,
+                success:success
+            }
+        }
     </script>
 
 </body>
