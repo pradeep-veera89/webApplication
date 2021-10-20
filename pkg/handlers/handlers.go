@@ -33,7 +33,7 @@ func NewHandlers(r *Repository) {
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	remoteIp := r.RemoteAddr
 	m.App.Session.Put(r.Context(), "remote-ip", remoteIp)
-	render.RenderTemplate(w, "home.page.html", &models.TemplateData{})
+	render.RenderTemplate(w, r, "home.page.html", &models.TemplateData{})
 }
 
 // About is the about page handler
@@ -45,32 +45,39 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	remoteIp := m.App.Session.Get(r.Context(), "remote-ip")
 	stringMap["remote_ip"] = fmt.Sprintf("%v", remoteIp)
 
-	render.RenderTemplate(w, "about.page.html", &models.TemplateData{
+	render.RenderTemplate(w, r, "about.page.html", &models.TemplateData{
 		StringMap: stringMap,
 	})
 }
 
 // Reservation is the make reservations page.
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "make-reservation.page.html", &models.TemplateData{})
+	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{})
 }
 
 // Generals is the room page
 func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "generals.page.html", &models.TemplateData{})
+	render.RenderTemplate(w, r, "generals.page.html", &models.TemplateData{})
 }
 
 // Majors is the room page
 func (m *Repository) Majors(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "majors.page.html", &models.TemplateData{})
+	render.RenderTemplate(w, r, "majors.page.html", &models.TemplateData{})
 }
 
 // Availability is the search avialability  page
 func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "search-availability.page.html", &models.TemplateData{})
+	render.RenderTemplate(w, r, "search-availability.page.html", &models.TemplateData{})
+}
+
+// Availability is the search avialability  page
+func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
+	start := r.Form.Get("start")
+	end := r.Form.Get("end")
+	fmt.Fprintf(w, "startDate is %s and end date is %s", start, end)
 }
 
 // Availability is the search avialability  page
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "contact.page.html", &models.TemplateData{})
+	render.RenderTemplate(w, r, "contact.page.html", &models.TemplateData{})
 }
