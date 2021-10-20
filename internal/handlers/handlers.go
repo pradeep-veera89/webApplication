@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/pradeep-veera89/webApplication/pkg/config"
-	"github.com/pradeep-veera89/webApplication/pkg/models"
-	"github.com/pradeep-veera89/webApplication/pkg/render"
+	"github.com/pradeep-veera89/webApplication/internal/config"
+	"github.com/pradeep-veera89/webApplication/internal/models"
+	"github.com/pradeep-veera89/webApplication/internal/render"
 )
 
 // Repo the repository used by the handlers
