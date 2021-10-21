@@ -66,6 +66,7 @@
 
 
 
+
     <footer class="my-footer">
         <div class="row">
             <div class="col">
@@ -101,9 +102,8 @@
     {{end}}
 
     <script>
-        console.log('touched base template');
-        let attention = prompt();
 
+        let attention = prompt();
 
 
         // Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -144,6 +144,18 @@
                 confirmButtonText: confirmButtonText
             })
         }
+        
+        {{with .Error}}
+        notify("{{.Error}}", "error")
+        {{end}}
+
+        {{with .Flash}}
+        notify("{{.}}", "success")
+        {{end}}
+
+        {{with .Warning}}
+        notify("{{.}}", "warning")
+        {{end}}
 
         // Using Javascript Modules (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
         function prompt() {

@@ -30,7 +30,7 @@
                         <label class="text-danger">{{.}}</label>
                     {{end}}
                         <input type="text" name="last_name" id="last_name" 
-                        class="form-control {{with .Form.Errors.Get "last_name"}} is-invalid {{end}}" 
+                        class="form-control {{with .Form.Errors.Get "first_name"}} is-invalid {{end}}" 
                         value="{{$res.LastName}}"
                         required autocomplete="off">
                     </div>
