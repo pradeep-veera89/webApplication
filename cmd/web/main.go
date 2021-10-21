@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/pradeep-veera89/webApplication/internal/config"
 	"github.com/pradeep-veera89/webApplication/internal/handlers"
+	"github.com/pradeep-veera89/webApplication/internal/helpers"
 	"github.com/pradeep-veera89/webApplication/internal/models"
 	"github.com/pradeep-veera89/webApplication/internal/render"
 )
@@ -18,6 +20,8 @@ const portNumber = ":8080"
 
 var app config.AppConfig
 var session *scs.SessionManager
+var infoLog *log.Logger
+var errorLog *log.Logger
 
 // main is the main application function
 func main() {
@@ -42,6 +46,16 @@ func run() error {
 	gob.Register(models.Reservation{})
 	// Change this to true when in production
 	app.InProduction = false
+
+	// initializing infoLog
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	// initializing errorLog
+	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
+
+	// initializing session from scs sessionManager.
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true
@@ -66,6 +80,7 @@ func run() error {
 
 	// assign the render package with AppConfig
 	render.NewTemplates(&app)
+	helpers.NewHelpers(&app)
 
 	return nil
 }
