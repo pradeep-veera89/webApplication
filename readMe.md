@@ -1,4 +1,7 @@
 # WebApplication
+
+## Command to run application on linux => ./run.sh
+
 ## CMD (cmd)
 #### web (cmd/web)
 - main.go
