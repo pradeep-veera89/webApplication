@@ -7,6 +7,47 @@ import (
 	"github.com/pradeep-veera89/webApplication/internal/models"
 )
 
+func TestNewTemplates(t *testing.T) {
+	NewTemplates(app)
+}
+
+func TestCreateTemplateCache(t *testing.T) {
+	pathToTemplates = "./../../templates"
+	_, err := CreateTemplateCache()
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestRenderTemplate(t *testing.T) {
+
+	pathToTemplates = "./../../templates"
+	tc, err := CreateTemplateCache()
+	if err != nil {
+		t.Error(err)
+	}
+	app.TemplateCache = tc
+	// generating Request
+	r, err := getSession()
+	if err != nil {
+		t.Error(err)
+	}
+	ww := myWriter{}
+
+	ww.Header()
+	ww.Write([]byte{})
+	ww.WriteHeader(200)
+	err = RenderTemplate(&ww, r, "home.page.html", &models.TemplateData{})
+	if err != nil {
+		t.Error("error writing template to browser")
+	}
+
+	err = RenderTemplate(&ww, r, "non-existing.page.html", &models.TemplateData{})
+	if err == nil {
+		t.Error("rendered template that does not exit")
+	}
+}
+
 func TestAddDefaultData(t *testing.T) {
 	var td models.TemplateData
 	r, err := getSession()

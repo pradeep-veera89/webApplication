@@ -28,8 +28,24 @@ func TestMain(m *testing.M) {
 	session.Cookie.Secure = testApp.InProduction
 
 	testApp.Session = session
-	
+
 	app = &testApp
 
 	os.Exit(m.Run())
+}
+
+type myWriter struct {
+}
+
+func (mw *myWriter) Header() http.Header {
+	return http.Header{}
+}
+
+func (mw *myWriter) Write(b []byte) (int, error) {
+	length := len(b)
+	return length, nil
+}
+
+func (mw *myWriter) WriteHeader(statusCode int) {
+
 }
