@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -22,6 +23,8 @@ var app config.AppConfig
 var session *scs.SessionManager
 var pathToTemplates = "./../../templates"
 var functions = template.FuncMap{}
+var infoLog *log.Logger
+var errorLog *log.Logger
 
 // NoSurf adds CSRF Protection to ll POST requests
 func NoSurf(next http.Handler) http.Handler {
@@ -48,6 +51,15 @@ func getRoutes() http.Handler {
 	gob.Register(models.Reservation{})
 	// Change this to true when in production
 	app.InProduction = false
+
+	// initializing infoLog
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	// initializing errorLog
+	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
+
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true
