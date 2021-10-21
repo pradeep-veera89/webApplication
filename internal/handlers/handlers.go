@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/pradeep-veera89/webApplication/internal/config"
+	"github.com/pradeep-veera89/webApplication/internal/forms"
 	"github.com/pradeep-veera89/webApplication/internal/models"
 	"github.com/pradeep-veera89/webApplication/internal/render"
 )
@@ -54,7 +55,14 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 // Reservation is the make reservations page.
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{})
+	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
+		Form: forms.New(nil),
+	})
+}
+
+// PostReservation handles the post data of the reservation form.
+func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Form submitted"))
 }
 
 // Generals is the room page

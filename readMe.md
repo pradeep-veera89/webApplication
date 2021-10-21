@@ -70,3 +70,10 @@
 - NoSurf Package 'github.com/justinas/nosurf' for CSRF Token Protection
 - CHI Router Package 'go get -u github.com/go-chi/chi/v5' for Routing instead of http router.
 - SCS (Session) Package 'https://github.com/alexedwards/scs' for session management.
+
+
+## External JS Packages
+- Sweet Alert for notification, popups
+- vanillaJs-datepicker for the datepicker at Search availaibilty
+- Jaredreich/notie for thee notification , on the top.
+  

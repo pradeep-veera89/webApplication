@@ -8,8 +8,9 @@
             <div class="col">
                 <h1>Make reservation</h1>
 
-                <form method="post" action="" class="needs-validation" novalidate>
+                <form method="post" action=""  novalidate >
 
+                    <input type="text" name="csrf_token" value={{.CSRFToken}} id="">
                     <div class="form-group mt-5">
                         <label for="first_name">FirstName</label>
                         <input type="text" name="first_name" id="first_name" class="form-control" required autocomplete="off">
