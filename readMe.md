@@ -70,6 +70,7 @@
 - NoSurf Package 'github.com/justinas/nosurf' for CSRF Token Protection
 - CHI Router Package 'go get -u github.com/go-chi/chi/v5' for Routing instead of http router.
 - SCS (Session) Package 'https://github.com/alexedwards/scs' for session management.
+- govalidator ('go get github.com/asaskevich/govalidator') package for validating the email addres in the form.
 
 
 ## External JS Packages
