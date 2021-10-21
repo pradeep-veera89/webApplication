@@ -75,7 +75,8 @@ func getRoutes() http.Handler {
 	mux := chi.NewRouter()
 	// middleware
 	mux.Use(middleware.Recoverer)
-	mux.Use(NoSurf)
+	// Commented for test env
+	//mux.Use(NoSurf)
 	mux.Use(SessionLoad)
 
 	// different routes.
