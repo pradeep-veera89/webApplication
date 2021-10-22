@@ -21,10 +21,10 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: reservatioins; Type: TABLE; Schema: public; Owner: golang
+-- Name: reservations; Type: TABLE; Schema: public; Owner: golang
 --
 
-CREATE TABLE public.reservatioins (
+CREATE TABLE public.reservations (
     id integer NOT NULL,
     first_name character varying(255) DEFAULT ''::character varying NOT NULL,
     last_name character varying(255) DEFAULT ''::character varying NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE public.reservatioins (
 );
 
 
-ALTER TABLE public.reservatioins OWNER TO golang;
+ALTER TABLE public.reservations OWNER TO golang;
 
 --
 -- Name: reservatioins_id_seq; Type: SEQUENCE; Schema: public; Owner: golang
@@ -59,7 +59,7 @@ ALTER TABLE public.reservatioins_id_seq OWNER TO golang;
 -- Name: reservatioins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: golang
 --
 
-ALTER SEQUENCE public.reservatioins_id_seq OWNED BY public.reservatioins.id;
+ALTER SEQUENCE public.reservatioins_id_seq OWNED BY public.reservations.id;
 
 
 --
@@ -226,10 +226,10 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: reservatioins id; Type: DEFAULT; Schema: public; Owner: golang
+-- Name: reservations id; Type: DEFAULT; Schema: public; Owner: golang
 --
 
-ALTER TABLE ONLY public.reservatioins ALTER COLUMN id SET DEFAULT nextval('public.reservatioins_id_seq'::regclass);
+ALTER TABLE ONLY public.reservations ALTER COLUMN id SET DEFAULT nextval('public.reservatioins_id_seq'::regclass);
 
 
 --
@@ -261,10 +261,10 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- Name: reservatioins reservatioins_pkey; Type: CONSTRAINT; Schema: public; Owner: golang
+-- Name: reservations reservatioins_pkey; Type: CONSTRAINT; Schema: public; Owner: golang
 --
 
-ALTER TABLE ONLY public.reservatioins
+ALTER TABLE ONLY public.reservations
     ADD CONSTRAINT reservatioins_pkey PRIMARY KEY (id);
 
 
@@ -305,6 +305,14 @@ ALTER TABLE ONLY public.users
 --
 
 CREATE UNIQUE INDEX schema_migration_version_idx ON public.schema_migration USING btree (version);
+
+
+--
+-- Name: reservations reservations_rooms_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: golang
+--
+
+ALTER TABLE ONLY public.reservations
+    ADD CONSTRAINT reservations_rooms_id_fk FOREIGN KEY (room_id) REFERENCES public.rooms(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
