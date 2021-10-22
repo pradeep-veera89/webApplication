@@ -1,3 +1,43 @@
+# FolderStructure
+- cmd
+  - web
+    - main.go
+    - middleware.go
+    - routes.go
+- pkg
+  - config
+    - config.go
+  - handlers
+    - handlers.go
+  - models
+    - templatedata.go
+  - render
+    - render.go
+- templates
+  - *.page.html
+  - *.layout.html
+
+# Features
+- Basic WebApplication Template
+- Dynamic HTML Template Caching
+- Repository style handlers
+- CSRF Protection
+- Session storage 
+
+# Structs
+- AppConfig (./pkg/config/config.go)
+- TemplateData (./pkg/models/templatedata.go)
+
+# External PKG 
+- ChiRouter
+- NoSurf for CSRF Protection
+- SCS Session Manager
+
+
+
+
+
+
 # WebApplication
 ## CMD (cmd)
 #### web (cmd/web)
