@@ -39,6 +39,7 @@ type Reservation struct {
 	Phone     string
 	StarDate  time.Time
 	EndDate   time.Time
+	RoomId    int
 	CreatedAt time.Time
 	UpdateAt  time.Time
 	Room      Room
