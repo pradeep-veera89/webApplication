@@ -41,10 +41,10 @@ CREATE TABLE public.reservations (
 ALTER TABLE public.reservations OWNER TO golang;
 
 --
--- Name: reservatioins_id_seq; Type: SEQUENCE; Schema: public; Owner: golang
+-- Name: reservations_id_seq; Type: SEQUENCE; Schema: public; Owner: golang
 --
 
-CREATE SEQUENCE public.reservatioins_id_seq
+CREATE SEQUENCE public.reservations_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -53,13 +53,13 @@ CREATE SEQUENCE public.reservatioins_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.reservatioins_id_seq OWNER TO golang;
+ALTER TABLE public.reservations_id_seq OWNER TO golang;
 
 --
--- Name: reservatioins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: golang
+-- Name: reservations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: golang
 --
 
-ALTER SEQUENCE public.reservatioins_id_seq OWNED BY public.reservations.id;
+ALTER SEQUENCE public.reservations_id_seq OWNED BY public.reservations.id;
 
 
 --
@@ -229,7 +229,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 -- Name: reservations id; Type: DEFAULT; Schema: public; Owner: golang
 --
 
-ALTER TABLE ONLY public.reservations ALTER COLUMN id SET DEFAULT nextval('public.reservatioins_id_seq'::regclass);
+ALTER TABLE ONLY public.reservations ALTER COLUMN id SET DEFAULT nextval('public.reservations_id_seq'::regclass);
 
 
 --
@@ -261,11 +261,11 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- Name: reservations reservatioins_pkey; Type: CONSTRAINT; Schema: public; Owner: golang
+-- Name: reservations reservations_pkey; Type: CONSTRAINT; Schema: public; Owner: golang
 --
 
 ALTER TABLE ONLY public.reservations
-    ADD CONSTRAINT reservatioins_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT reservations_pkey PRIMARY KEY (id);
 
 
 --
