@@ -68,7 +68,7 @@ func run() (*driver.DB, error) {
 	app.Session = session
 
 	log.Println("Connecting to Database ....")
-	db, err := driver.ConnectSQL("host=localhost post=5432 dbname=bookings user= password=")
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=bookings user=golang password=test123")
 	if err != nil {
 		log.Fatal("Cannot connect to DB ")
 	}
