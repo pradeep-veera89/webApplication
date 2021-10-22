@@ -6,10 +6,13 @@ import (
 	"net/http"
 
 	"github.com/pradeep-veera89/webApplication/internal/config"
+	"github.com/pradeep-veera89/webApplication/internal/driver"
 	"github.com/pradeep-veera89/webApplication/internal/forms"
 	"github.com/pradeep-veera89/webApplication/internal/helpers"
 	"github.com/pradeep-veera89/webApplication/internal/models"
 	"github.com/pradeep-veera89/webApplication/internal/render"
+	"github.com/pradeep-veera89/webApplication/internal/repository"
+	"github.com/pradeep-veera89/webApplication/internal/repository/dbrepo"
 )
 
 // Repo the repository used by the handlers
@@ -18,12 +21,14 @@ var Repo *Repository
 //Repository is a repository type
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 // NewRepo creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB: dbrepo.NewPostgresRepo(db.SQL,a),
 	}
 }
 
