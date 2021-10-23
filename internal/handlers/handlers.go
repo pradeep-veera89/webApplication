@@ -53,13 +53,37 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 // Reservation is the make reservations page.
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 
-	var emptyReservation models.Reservation
+	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		helpers.ServerError(w, errors.New("failed to fetch reservation detials from session"))
+	}
+	m.App.InfoLog.Println("RoomId from reservation", reservation.RoomId)
+	// get room details by id
+	room, err := m.DB.GetRoomById(reservation.RoomId)
+	m.App.InfoLog.Println("Room", room)
+
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	// update the reservatio with room name
+	reservation.Room.RoomName = room.RoomName
+	// reversal converting Date from Go layout to string.
+	layout := "2006-01-02"
+	sd := reservation.StarDate.Format(layout)
+	ed := reservation.EndDate.Format(layout)
+
+	stringMap := make(map[string]string)
+	stringMap["start_date"] = sd
+	stringMap["end_date"] = ed
+
 	data := make(map[string]interface{})
-	data["reservation"] = emptyReservation
+	data["reservation"] = reservation
 
 	render.Template(w, r, "make-reservation.page.html", &models.TemplateData{
-		Form: forms.New(nil),
-		Data: data,
+		Form:      forms.New(nil),
+		Data:      data,
+		StringMap: stringMap,
 	})
 }
 
