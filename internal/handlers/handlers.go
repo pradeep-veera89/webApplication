@@ -274,6 +274,7 @@ func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "contact.page.html", &models.TemplateData{})
 }
 
+// ReservationSummary displays reservation summary 
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
@@ -301,6 +302,7 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	})
 }
 
+// ChooseRoom displays the user to choose room.
 func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 
 	roomId, err := strconv.Atoi(chi.URLParam(r, "id"))
@@ -318,4 +320,49 @@ func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	m.App.Session.Put(r.Context(), "reservation", reservation)
 
 	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
+}
+
+// BookRoom takes URL parameters, builds a sessional variable and takes url to make-reservation page.
+func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
+
+	// get the params from URL id, e, s
+	roomId, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	sd := r.URL.Query().Get("s")
+	ed := r.URL.Query().Get("e")
+
+	layout := "2006-01-02"
+	startDate, err := time.Parse(layout, sd)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	endDate, err := time.Parse(layout, ed)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	room, err := m.DB.GetRoomById(roomId)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	// insert into reservations model.
+	var reservation models.Reservation
+	reservation.RoomId = roomId
+	reservation.Room.RoomName = room.RoomName
+	reservation.StarDate = startDate
+	reservation.EndDate = endDate
+
+	// Make a new session reservation.
+	m.App.Session.Put(r.Context(), "reservation", reservation)
+
+	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
+
 }
