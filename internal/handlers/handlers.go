@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 	"time"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/pradeep-veera89/webApplication/internal/config"
 	"github.com/pradeep-veera89/webApplication/internal/driver"
 	"github.com/pradeep-veera89/webApplication/internal/forms"
@@ -249,4 +251,23 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	render.Template(w, r, "reservation-summary.page.html", &models.TemplateData{
 		Data: data,
 	})
+}
+
+func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
+
+	roomId, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		helpers.ServerError(w, errors.New("could not fetch reservation from session "))
+	}
+
+	reservation.RoomId = roomId
+
+	m.App.Session.Put(r.Context(), "reservation", reservation)
+
+	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
 }
