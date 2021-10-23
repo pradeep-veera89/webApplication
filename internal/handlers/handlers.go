@@ -68,6 +68,9 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	}
 	// update the reservatio with room name
 	reservation.Room.RoomName = room.RoomName
+
+	// save reservation details into session again
+	m.App.Session.Put(r.Context(), "reservation", reservation)
 	// reversal converting Date from Go layout to string.
 	layout := "2006-01-02"
 	sd := reservation.StarDate.Format(layout)
@@ -95,39 +98,16 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 		return
 	}
-
-	sd := r.Form.Get("start_date")
-	ed := r.Form.Get("end_date")
-
-	// Mon Jan 2 15:04:05 MST 2006(MST is GMT -007) --  01/02 03:04:05PM '06 -0700
-	// 2020-01-02 - 01/02
-	layout := "2006-01-02"
-	startDate, err := time.Parse(layout, sd)
-	if err != nil {
-		helpers.ServerError(w, err)
-		return
+	// Get reservation details from session.
+	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		helpers.ServerError(w, errors.New("could not get reservation from session"))
 	}
-	endDate, err := time.Parse(layout, ed)
-	if err != nil {
-		helpers.ServerError(w, err)
-		return
-	}
-
-	roomId, err := strconv.Atoi(r.Form.Get("room_id"))
-	if err != nil {
-		helpers.ServerError(w, err)
-		return
-	}
-	// initiate the reservation from user form data
-	reservation := models.Reservation{
-		FirstName: r.Form.Get("first_name"),
-		LastName:  r.Form.Get("last_name"),
-		Phone:     r.Form.Get("phone"),
-		Email:     r.Form.Get("email"),
-		StarDate:  startDate,
-		EndDate:   endDate,
-		RoomId:    roomId,
-	}
+	// update reservation from user information
+	reservation.Email = r.Form.Get("email")
+	reservation.FirstName = r.Form.Get("first_name")
+	reservation.LastName = r.Form.Get("last_name")
+	reservation.Phone = r.Form.Get("phone")
 
 	form := forms.New(r.PostForm)
 	form.Required("first_name", "last_name", "email")
@@ -150,13 +130,14 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 		return
 	}
-
+	reservation.Id = newReservationId
+	m.App.Session.Put(r.Context(), "reservation", reservation)
 	// insert into Room data to Room Restrictions.
 	restriction := models.RoomRestriction{
-		StarDate:      startDate,
-		EndDate:       endDate,
-		RoomId:        roomId,
-		ReservationId: newReservationId,
+		StarDate:      reservation.StarDate,
+		EndDate:       reservation.EndDate,
+		RoomId:        reservation.RoomId,
+		ReservationId: reservation.Id,
 		RestrictionId: 1,
 	}
 	err = m.DB.InsertRoomRestriction(restriction)
@@ -270,10 +251,21 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	}
 	// removing data from the session.
 	m.App.Session.Remove(r.Context(), "reservation")
+
 	data := make(map[string]interface{})
 	data["reservation"] = reservation
+	// converting startdate and enddate to stringMap
+	layout := "2006-01-02"
+	sd := reservation.StarDate.Format(layout)
+	ed := reservation.EndDate.Format(layout)
+
+	stringMap := make(map[string]string)
+	stringMap["start_date"] = sd
+	stringMap["end_date"] = ed
+
 	render.Template(w, r, "reservation-summary.page.html", &models.TemplateData{
-		Data: data,
+		Data:      data,
+		StringMap: stringMap,
 	})
 }
 
