@@ -35,6 +35,14 @@ func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	}
 }
 
+// NewRepo creates a new repository
+func NewTestRepo(a *config.AppConfig) *Repository {
+	return &Repository{
+		App: a,
+		DB:  dbrepo.NewTestingRepo(a),
+	}
+}
+
 // NewHandlers sets the repository for the handlers
 func NewHandlers(r *Repository) {
 	Repo = r
@@ -274,7 +282,7 @@ func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "contact.page.html", &models.TemplateData{})
 }
 
-// ReservationSummary displays reservation summary 
+// ReservationSummary displays reservation summary
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {

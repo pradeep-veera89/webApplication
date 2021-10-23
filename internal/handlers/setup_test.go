@@ -78,7 +78,7 @@ func getRoutes() http.Handler {
 	app.UseCache = true
 
 	// creating new Repositories inside the handler package
-	repo := NewRepo(&app)
+	repo := NewTestRepo(&app)
 	NewHandlers(repo)
 
 	// assign the render package with AppConfig
