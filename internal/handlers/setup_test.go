@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"testing"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
@@ -43,9 +44,7 @@ func SessionLoad(next http.Handler) http.Handler {
 	return session.LoadAndSave(next)
 }
 
-// getRoutes does the return routes required for testing handler_test.go
-// copied from run at main.go
-func getRoutes() http.Handler {
+func TestMain(m *testing.M) {
 
 	//  What am i goin to store in Session
 	gob.Register(models.Reservation{})
@@ -83,6 +82,12 @@ func getRoutes() http.Handler {
 
 	// assign the render package with AppConfig
 	render.NewRenderer(&app)
+	os.Exit(m.Run())
+}
+
+// getRoutes does the return routes required for testing handler_test.go
+// copied from run at main.go
+func getRoutes() http.Handler {
 
 	mux := chi.NewRouter()
 	// middleware
