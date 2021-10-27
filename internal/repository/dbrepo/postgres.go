@@ -3,7 +3,6 @@ package dbrepo
 import (
 	"context"
 	"errors"
-	"log"
 	"time"
 
 	"github.com/pradeep-veera89/webApplication/internal/models"
@@ -261,6 +260,7 @@ func (m *postgresDBRepo) AllReservations() ([]models.Reservation, error) {
 		 	r.phone, 
 		 	r.start_date,
 		 	r.end_date,
+			r.processed,
 		 	rm.id,
 		 	rm.room_name
 		 from
@@ -286,13 +286,72 @@ func (m *postgresDBRepo) AllReservations() ([]models.Reservation, error) {
 			&i.Phone,
 			&i.StarDate,
 			&i.EndDate,
+			&i.Processed,
 			&i.Room.Id,
 			&i.Room.RoomName,
 		)
 		if err != nil {
 			return nil, err
 		}
-		log.Println(i)
+
+		reservations = append(reservations, i)
+	}
+
+	if err = rows.Err(); err != nil {
+		return reservations, err
+	}
+	return reservations, nil
+}
+
+func (m *postgresDBRepo) AllNewReservations() ([]models.Reservation, error) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	stmt := `
+		select 
+			r.id,
+			r.first_name,
+			r.last_name, 
+		 	r.email, 
+		 	r.phone, 
+		 	r.start_date,
+		 	r.end_date,
+			r.processed,
+		 	rm.id,
+		 	rm.room_name
+		 from
+		 	reservations r
+		    left join rooms rm on r.room_id = rm.id
+		 where r.processed = 0
+		    order by r.start_date asc`
+
+	var reservations []models.Reservation
+	rows, err := m.DB.QueryContext(ctx, stmt)
+	if err != nil {
+		return reservations, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var i models.Reservation
+		err := rows.Scan(
+			&i.Id,
+			&i.FirstName,
+			&i.LastName,
+			&i.Email,
+			&i.Phone,
+			&i.StarDate,
+			&i.EndDate,
+			&i.Processed,
+			&i.Room.Id,
+			&i.Room.RoomName,
+		)
+		if err != nil {
+			return nil, err
+		}
+
 		reservations = append(reservations, i)
 	}
 
