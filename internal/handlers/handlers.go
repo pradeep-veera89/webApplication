@@ -509,12 +509,14 @@ func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
 	form := forms.New(r.PostForm)
 	form.Required("email", "password")
 	if !form.Valid() {
-		// Todo- take user back to page.
+		render.Template(w, r, "login.page.html", &models.TemplateData{
+			Form: form,
+		})
+		return
 	}
 	id, _, err := m.DB.Authenticate(r.Form.Get("email"), r.Form.Get("password"))
 
 	if err != nil {
-		log.Println(err)
 		m.App.Session.Put(r.Context(), "error", "Invalid login credentials")
 		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 	}
