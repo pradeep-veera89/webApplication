@@ -13,6 +13,7 @@ import (
 	"github.com/pradeep-veera89/webApplication/internal/config"
 	"github.com/pradeep-veera89/webApplication/internal/driver"
 	"github.com/pradeep-veera89/webApplication/internal/forms"
+	"github.com/pradeep-veera89/webApplication/internal/helpers"
 
 	//"github.com/pradeep-veera89/webApplication/internal/helpers"
 	"github.com/pradeep-veera89/webApplication/internal/models"
@@ -545,4 +546,26 @@ func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 
 func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "admin-dashboard.page.html", &models.TemplateData{})
+}
+
+func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "admin-new-reservations.page.html", &models.TemplateData{})
+}
+
+func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request) {
+
+	reservations, err := m.DB.AllReservations()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data := make(map[string]interface{})
+	data["reservations"] = reservations
+	render.Template(w, r, "admin-all-reservations.page.html", &models.TemplateData{
+		Data: data,
+	})
+}
+
+func (m *Repository) AdminReservationsCalender(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "admin-reservations-calender.page.html", &models.TemplateData{})
 }
