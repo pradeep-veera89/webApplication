@@ -6,7 +6,7 @@
             <div class="col">
                 <h1>Login</h1>
                 {{$res := index .Data "Forms"}}
-                <form method="post" action="/user/login" class="form-group mt-3">
+                <form method="post" action="/user/login" class="form-group mt-3" novalidate>
                     <input type="hidden" name="csrf_token" value={{.CSRFToken}}>
                     <div class="form-group mt-3">
                         <label for="email">Email</label>

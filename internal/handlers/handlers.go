@@ -508,21 +508,41 @@ func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
 
 	form := forms.New(r.PostForm)
 	form.Required("email", "password")
+
 	if !form.Valid() {
 		render.Template(w, r, "login.page.html", &models.TemplateData{
 			Form: form,
 		})
 		return
 	}
-	id, _, err := m.DB.Authenticate(r.Form.Get("email"), r.Form.Get("password"))
+	email := r.Form.Get("email")
+	password := r.Form.Get("password")
+
+	id, _, err := m.DB.Authenticate(email, password)
 
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Invalid login credentials")
 		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+		return
 	}
-
 	m.App.Session.Put(r.Context(), "user_id", id)
 	m.App.Session.Put(r.Context(), "flash", "Logged in successfully")
+
+	userId := m.App.Session.Get(r.Context(), "user_id")
+	if m.App.Session.Exists(r.Context(), "user_id") {
+		log.Println("UserId", userId)
+	}
+
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 
+}
+
+func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
+	_ = m.App.Session.Destroy(r.Context())
+	_ = m.App.Session.RenewToken(r.Context())
+	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+}
+
+func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "admin-dashboard.page.html", &models.TemplateData{})
 }

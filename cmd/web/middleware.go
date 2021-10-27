@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/justinas/nosurf"
@@ -25,11 +26,14 @@ func SessionLoad(next http.Handler) http.Handler {
 }
 
 func Auth(next http.Handler) http.Handler {
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Inside Auth")
 		if !helpers.IsAuthenticated(r) {
+			log.Println("Check if User is Authenticated")
 			session.Put(r.Context(), "error", "Log in first")
 			http.Redirect(w, r, "/user/login", http.StatusSeeOther)
-			return
+			//return
 		}
 		next.ServeHTTP(w, r)
 	})

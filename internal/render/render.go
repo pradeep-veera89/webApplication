@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"path/filepath"
 
@@ -31,6 +32,10 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 	td.Warning = app.Session.PopString(r.Context(), "warning")
 	td.Error = app.Session.PopString(r.Context(), "error")
 	td.CSRFToken = nosurf.Token(r)
+	if app.Session.Exists(r.Context(), "user_id") {
+		log.Println("exists inside AddDefaultData")
+		td.IsAuthenticated = 1
+	}
 	return td
 }
 
@@ -53,6 +58,7 @@ func Template(w http.ResponseWriter, r *http.Request, html string, td *models.Te
 	buf := new(bytes.Buffer)
 
 	td = AddDefaultData(td, r)
+	log.Println("Template Is Authenticated", td.IsAuthenticated)
 	_ = t.Execute(buf, td)
 	_, err := buf.WriteTo(w)
 	if err != nil {
